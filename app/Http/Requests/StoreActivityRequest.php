@@ -19,7 +19,7 @@ class StoreActivityRequest extends FormRequest
             'description'   => ['nullable', 'string', 'max:1000'],
             'activity_date' => ['required', 'date'],
             'category'      => ['required', 'string', 'max:50'],
-            'status'        => ['required', Rule::in(['Planned', 'Ongoing', 'Done'])],
+            'status'        => ['required', Rule::in(\App\Models\Activity::STATUSES)],
         ];
     }
 }

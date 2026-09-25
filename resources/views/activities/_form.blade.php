@@ -25,9 +25,9 @@
 
 <label for="status">Status</label>
 <select name="status" id="status">
-    @foreach (['Planned', 'Ongoing', 'Done'] as $status)
-        <option value="{{ $status }}" @selected(old('status', $activity->status ?? 'Planned') === $status)>
-            {{ $status }}
+    @foreach (\App\Models\Activity::STATUSES as $statusOption)
+        <option value="{{ $statusOption }}" @selected(old('status', $activity->status ?? 'Planned') === $statusOption)>
+            {{ $statusOption }}
         </option>
     @endforeach
 </select>

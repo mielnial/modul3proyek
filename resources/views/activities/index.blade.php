@@ -10,7 +10,7 @@
            style="font-weight: {{ !$selectedStatus ? 'bold' : 'normal' }};">
             Semua
         </a>
-        @foreach (['Planned', 'Ongoing', 'Done'] as $statusOption)
+        @foreach (\App\Models\Activity::STATUSES as $statusOption)
             <a href="{{ route('activities.index', ['status' => $statusOption]) }}"
                style="font-weight: {{ $selectedStatus === $statusOption ? 'bold' : 'normal' }}; margin-left: 10px;">
                 {{ $statusOption }}

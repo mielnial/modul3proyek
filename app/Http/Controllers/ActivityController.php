@@ -17,11 +17,9 @@ class ActivityController extends Controller
     {
         $status = $request->query('status');
 
-        $validStatuses = ['Planned', 'Ongoing', 'Done'];
-
         $activities = Activity::query()
             ->when(
-                in_array($status, $validStatuses, true),
+                in_array($status, Activity::STATUSES, true),
                 fn ($query) => $query->where('status', $status)
             )
             ->orderBy('activity_date')
