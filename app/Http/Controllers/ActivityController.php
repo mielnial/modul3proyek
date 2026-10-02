@@ -16,18 +16,30 @@ class ActivityController extends Controller
     public function index(Request $request): View
     {
         $status = $request->query('status');
+        $category_id = $request->query('category_id');
+        $search = $request->query('search');
+        $sort = $request->query('sort', 'desc');
 
         $activities = Activity::query()
+            ->with('category')
             ->when(
                 in_array($status, Activity::STATUSES, true),
                 fn ($query) => $query->where('status', $status)
             )
-            ->orderBy('activity_date')
-            ->get();
+            ->when($category_id, fn ($query) => $query->where('category_id', $category_id))
+            ->when($search, fn ($query) => $query->where('title', 'like', "%{$search}%"))
+            ->orderBy('activity_date', $sort === 'asc' ? 'asc' : 'desc')
+            ->paginate(5)
+            ->withQueryString();
+            
+        $categories = \App\Models\Category::orderBy('name')->get();
 
         return view('activities.index', [
             'activities' => $activities,
             'selectedStatus' => $status,
+            'categories' => $categories,
+        ]);
+    }
         ]);
     }
 

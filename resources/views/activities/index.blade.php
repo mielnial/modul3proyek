@@ -5,18 +5,31 @@
 
     <a href="{{ route('activities.create') }}">+ Tambah Kegiatan</a>
 
-    <div class="filters" style="margin-bottom: 1rem;">
-        <a href="{{ route('activities.index') }}"
-           style="font-weight: {{ !$selectedStatus ? 'bold' : 'normal' }};">
-            Semua
-        </a>
-        @foreach (\App\Models\Activity::STATUSES as $statusOption)
-            <a href="{{ route('activities.index', ['status' => $statusOption]) }}"
-               style="font-weight: {{ $selectedStatus === $statusOption ? 'bold' : 'normal' }}; margin-left: 10px;">
-                {{ $statusOption }}
-            </a>
-        @endforeach
-    </div>
+    <form method="GET" action="{{ route('activities.index') }}" style="margin: 1rem 0; padding: 1rem; border: 1px solid #ccc; background: #f9f9f9;">
+        <input type="text" name="search" placeholder="Cari judul..." value="{{ request('search') }}" style="margin-right: 10px;">
+        
+        <select name="category_id" style="margin-right: 10px;">
+            <option value="">Semua Kategori</option>
+            @foreach($categories as $cat)
+                <option value="{{ $cat->id }}" @selected(request('category_id') == $cat->id)>{{ $cat->name }}</option>
+            @endforeach
+        </select>
+
+        <select name="status" style="margin-right: 10px;">
+            <option value="">Semua Status</option>
+            @foreach(\App\Models\Activity::STATUSES as $stat)
+                <option value="{{ $stat }}" @selected(request('status') === $stat)>{{ $stat }}</option>
+            @endforeach
+        </select>
+
+        <select name="sort" style="margin-right: 10px;">
+            <option value="desc" @selected(request('sort') === 'desc')>Terbaru (Desc)</option>
+            <option value="asc" @selected(request('sort') === 'asc')>Terlama (Asc)</option>
+        </select>
+
+        <button type="submit">Filter</button>
+        <a href="{{ route('activities.index') }}">Reset</a>
+    </form>
 
     @forelse ($activities as $activity)
         <div class="card">
@@ -25,10 +38,14 @@
                     {{ $activity->title }}
                 </a>
             </h3>
-            <p>{{ $activity->activity_date->format('d M Y') }} — {{ $activity->category ? $activity->category->name : '-' }}</p>
+            <p>{{ $activity->activity_date->format('d M Y') }} - {{ $activity->category ? $activity->category->name : '-' }}</p>
             <span class="status status-{{ $activity->status }}">{{ $activity->status }}</span>
         </div>
     @empty
         <p>Belum ada kegiatan.</p>
     @endforelse
+
+    <div style="margin-top: 1rem;">
+        {{ $activities->links() }}
+    </div>
 @endsection

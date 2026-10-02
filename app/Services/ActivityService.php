@@ -23,6 +23,13 @@ class ActivityService
         $nextStatus = $data['status'] ?? $activity->status;
 
         $this->ensureValidTransition($activity->status, $nextStatus);
+        
+        // Business rule guard: Draft tidak lengkap ke Published (Planned -> Ongoing)
+        if ($activity->status === 'Planned' && $nextStatus === 'Ongoing') {
+            if (empty($data['description']) && empty($activity->description)) {
+                throw new DomainException('Kegiatan tidak dapat diubah menjadi Ongoing karena deskripsi masih kosong.');
+            }
+        }
 
         $activity->update($data);
 
