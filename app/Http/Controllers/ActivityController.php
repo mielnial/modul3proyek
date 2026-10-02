@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreActivityRequest;
 use App\Http\Requests\UpdateActivityRequest;
 use App\Models\Activity;
+use App\Models\Category;
 use App\Services\ActivityService;
 use DomainException;
 use Illuminate\Http\Request;
@@ -32,7 +33,7 @@ class ActivityController extends Controller
             ->paginate(5)
             ->withQueryString();
             
-        $categories = \App\Models\Category::orderBy('name')->get();
+        $categories = Category::orderBy('name')->get();
 
         return view('activities.index', [
             'activities' => $activities,
@@ -40,12 +41,10 @@ class ActivityController extends Controller
             'categories' => $categories,
         ]);
     }
-        ]);
-    }
 
     public function create(): View
     {
-        $categories = \App\Models\Category::all();
+        $categories = Category::all();
         return view('activities.create', compact('categories'));
     }
 
@@ -64,7 +63,7 @@ class ActivityController extends Controller
 
     public function edit(Activity $activity): View
     {
-        $categories = \App\Models\Category::all();
+        $categories = Category::all();
         return view('activities.edit', compact('activity', 'categories'));
     }
 
@@ -82,11 +81,26 @@ class ActivityController extends Controller
             ->with('success', 'Kegiatan berhasil diperbarui.');
     }
 
-    public function destroy(Activity $activity): RedirectResponse
+    public function destroy(Activity $activity, ActivityService $service): RedirectResponse
     {
-        $activity->delete();
+        $service->delete($activity);
 
         return to_route('activities.index')
-            ->with('success', 'Kegiatan berhasil dihapus.');
+            ->with('success', 'Kegiatan dipindahkan ke Trash dan masih dapat dipulihkan.');
+    }
+
+    public function trash(ActivityService $service): View
+    {
+        return view('activities.trash', [
+            'activities' => $service->paginateTrashed(),
+        ]);
+    }
+
+    public function restore(Activity $activity, ActivityService $service): RedirectResponse
+    {
+        $service->restore($activity);
+
+        return to_route('activities.index')
+            ->with('success', 'Kegiatan berhasil dipulihkan.');
     }
 }

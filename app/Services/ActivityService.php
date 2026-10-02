@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Activity;
 use DomainException;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class ActivityService
 {
@@ -34,6 +35,35 @@ class ActivityService
         $activity->update($data);
 
         return $activity->refresh();
+    }
+
+    /**
+     * Soft delete: mengisi deleted_at, record tetap ada di database.
+     */
+    public function delete(Activity $activity): void
+    {
+        $activity->delete();
+    }
+
+    /**
+     * Restore: mengosongkan kembali deleted_at sehingga kegiatan kembali ke daftar aktif.
+     */
+    public function restore(Activity $activity): Activity
+    {
+        $activity->restore();
+
+        return $activity->refresh();
+    }
+
+    /**
+     * Daftar kegiatan yang sudah di-soft-delete (halaman Trash).
+     */
+    public function paginateTrashed(int $perPage = 5): LengthAwarePaginator
+    {
+        return Activity::onlyTrashed()
+            ->with('category')
+            ->latest('deleted_at')
+            ->paginate($perPage);
     }
 
     private function ensureValidTransition(string $current, string $next): void
