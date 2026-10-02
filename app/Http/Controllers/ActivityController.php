@@ -8,8 +8,8 @@ use App\Models\Activity;
 use App\Models\Category;
 use App\Services\ActivityService;
 use DomainException;
-use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class ActivityController extends Controller
@@ -32,7 +32,7 @@ class ActivityController extends Controller
             ->orderBy('activity_date', $sort === 'asc' ? 'asc' : 'desc')
             ->paginate(5)
             ->withQueryString();
-            
+
         $categories = Category::orderBy('name')->get();
 
         return view('activities.index', [
@@ -45,12 +45,17 @@ class ActivityController extends Controller
     public function create(): View
     {
         $categories = Category::all();
+
         return view('activities.create', compact('categories'));
     }
 
     public function store(StoreActivityRequest $request, ActivityService $service): RedirectResponse
     {
-        $activity = $service->create($request->validated());
+        $data = $request->validated();
+        $poster = $data['poster'] ?? null;
+        unset($data['poster']);
+
+        $activity = $service->create($data, $poster);
 
         return to_route('activities.show', $activity)
             ->with('success', 'Kegiatan berhasil dibuat.');
@@ -64,13 +69,18 @@ class ActivityController extends Controller
     public function edit(Activity $activity): View
     {
         $categories = Category::all();
+
         return view('activities.edit', compact('activity', 'categories'));
     }
 
     public function update(UpdateActivityRequest $request, Activity $activity, ActivityService $service): RedirectResponse
     {
+        $data = $request->validated();
+        $poster = $data['poster'] ?? null;
+        unset($data['poster']);
+
         try {
-            $service->update($activity, $request->validated());
+            $service->update($activity, $data, $poster);
         } catch (DomainException $exception) {
             return back()
                 ->withErrors(['status' => $exception->getMessage()])

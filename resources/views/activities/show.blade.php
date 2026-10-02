@@ -12,6 +12,10 @@
     <p><strong>Deskripsi:</strong><br>
         {{ $activity->description ?? '-' }}
     </p>
+    @if ($activity->poster_path)
+        <p><strong>Poster:</strong></p>
+        <img src="{{ asset('storage/'.$activity->poster_path) }}" alt="Poster kegiatan {{ $activity->title }}" style="max-width: 480px; height: auto;">
+    @endif
     <div style="margin-top: 16px;">
         <a href="{{ route('activities.edit', $activity) }}">Ubah</a>
 

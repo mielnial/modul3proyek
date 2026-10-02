@@ -4,7 +4,7 @@
     <a href="{{ route('activities.show', $activity) }}">&larr; Kembali</a>
     <h1>Ubah Kegiatan</h1>
 
-    <form action="{{ route('activities.update', $activity) }}" method="POST">
+    <form action="{{ route('activities.update', $activity) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         @include('activities._form')

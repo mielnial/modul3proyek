@@ -17,6 +17,7 @@ class Activity extends Model
         'activity_date',
         'category_id',
         'status',
+        'poster_path',
     ];
 
     public function category()

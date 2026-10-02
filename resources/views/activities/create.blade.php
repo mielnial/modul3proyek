@@ -4,7 +4,7 @@
     <a href="{{ route('activities.index') }}">&larr; Kembali</a>
     <h1>Tambah Kegiatan</h1>
 
-    <form action="{{ route('activities.store') }}" method="POST">
+    <form action="{{ route('activities.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         @include('activities._form')
         <button type="submit">Simpan</button>
