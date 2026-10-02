@@ -18,7 +18,7 @@ class ActivitySeeder extends Seeder
                 'title'         => 'Bootcamp Static Analysis',
                 'description'   => 'Pengenalan SonarQube dan analisis kode statis.',
                 'activity_date' => '2026-09-18',
-                'category'      => 'Bootcamp',
+                'category_id'   => 2, // Bootcamp
                 'status'        => 'Done',
                 'created_at'    => now(),
                 'updated_at'    => now(),
@@ -27,7 +27,7 @@ class ActivitySeeder extends Seeder
                 'title'         => 'Rapat Koordinasi Job Proyek',
                 'description'   => 'Evaluasi pembagian tugas proyek akhir semester.',
                 'activity_date' => '2026-09-20',
-                'category'      => 'Rapat',
+                'category_id'   => 3, // Rapat
                 'status'        => 'Done',
                 'created_at'    => now(),
                 'updated_at'    => now(),
@@ -36,7 +36,7 @@ class ActivitySeeder extends Seeder
                 'title'         => 'Seminar Web Quality',
                 'description'   => 'Pengenalan maintainability dan testing.',
                 'activity_date' => '2026-10-12',
-                'category'      => 'Seminar',
+                'category_id'   => 4, // Seminar
                 'status'        => 'Ongoing',
                 'created_at'    => now(),
                 'updated_at'    => now(),
@@ -45,7 +45,7 @@ class ActivitySeeder extends Seeder
                 'title'         => 'Pelatihan Laravel Lanjutan',
                 'description'   => 'Implementasi service layer dan refactor controller.',
                 'activity_date' => '2026-10-15',
-                'category'      => 'Pelatihan',
+                'category_id'   => 5, // Pelatihan
                 'status'        => 'Planned',
                 'created_at'    => now(),
                 'updated_at'    => now(),
@@ -54,7 +54,7 @@ class ActivitySeeder extends Seeder
                 'title'         => 'Workshop Git Dasar',
                 'description'   => 'Latihan kolaborasi repository.',
                 'activity_date' => '2026-10-05',
-                'category'      => 'Workshop',
+                'category_id'   => 6, // Workshop
                 'status'        => 'Planned',
                 'created_at'    => now(),
                 'updated_at'    => now(),

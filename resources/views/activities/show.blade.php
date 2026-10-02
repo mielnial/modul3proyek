@@ -5,7 +5,7 @@
     <h1>{{ $activity->title }}</h1>
 
     <p><strong>Tanggal:</strong> {{ $activity->activity_date->format('d M Y') }}</p>
-    <p><strong>Kategori:</strong> {{ $activity->category }}</p>
+    <p><strong>Kategori:</strong> {{ $activity->category ? $activity->category->name : '-' }}</p>
     <p><strong>Status:</strong>
         <span class="status status-{{ $activity->status }}">{{ $activity->status }}</span>
     </p>

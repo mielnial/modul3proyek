@@ -25,7 +25,7 @@
                     {{ $activity->title }}
                 </a>
             </h3>
-            <p>{{ $activity->activity_date->format('d M Y') }} — {{ $activity->category }}</p>
+            <p>{{ $activity->activity_date->format('d M Y') }} — {{ $activity->category ? $activity->category->name : '-' }}</p>
             <span class="status status-{{ $activity->status }}">{{ $activity->status }}</span>
         </div>
     @empty
